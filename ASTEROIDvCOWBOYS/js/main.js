@@ -25,7 +25,7 @@ window.onload = function() {
     var cowboyBullets;
     var bulletTime = 0;
     var livingCowboys = [];
-    var welcomeText = 'WELCOME TO\nASTEROID v COWBOYS\nDestroy 5 planets to win!.'
+    var welcomeText = 'WELCOME TO\nASTEROIDvCOWBOYS\nDestroy 5 planets to win!'
     var welcomeLabel;
     var asteroidHealthText = 'Health: ';
     var asteroidHealthLabel;
