@@ -294,39 +294,42 @@ window.onload = function() {
         var rand = game.rnd.integerInRange(0,150);
         var randSide = game.rnd.integerInRange(0,1);
         if(rand === 1) {
+            var planet;
             if(side === 0) {
-                planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
+                planet = planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
             }else if(side === 1) {
-                planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
+                planet = planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
              }else if(side === 2) {
-                planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
+                planet = planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
             }else if(side === 3) {
-                planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
+                planet = planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
             }else if(side === 4) {
                 if(randSide === 0){
-                    planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
+                    planet = planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
                 }else{
-                    planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
+                    planet = planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
                 }
             }else if(side === 5) {
                 if(randSide === 0){
-                    planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
+                    planet = planets.create(0, window.innerHeight*game.rnd.frac(), 'planet');
                 }else{
-                    planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
+                    planet = planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
                 }
             }else if(side === 6) {
                 if(randSide === 0){
-                    planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
+                    planet = planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
                 }else{
-                    planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
+                    planet = planets.create(window.innerWidth*game.rnd.frac(), 0, 'planet');
                 }
             }else if(side === 7) {
                 if(randSide === 0){
-                    planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
+                    planet = planets.create(window.innerWidth, window.innerHeight*game.rnd.frac(), 'planet');
                 }else{
-                    planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
+                    planet = planets.create(window.innerWidth*game.rnd.frac(), window.innerHeight, 'planet');
                 }
             }
+
+            planet.anchor.setTo( 0.4, 0.4 );
         }
     }
 
@@ -335,13 +338,13 @@ window.onload = function() {
         livingCowboys.length=0;
 
         cowboys.forEachAlive(function(cowboy){
-            if(cowboy.inWorld()){
+            if(cowboy.game.world.bounds.intersects(cowboy.getBounds())){
                 livingCowboys.push(cowboy);
             }
         });
 
         if (cowboyBullet && livingCowboys.length > 0) {
-            var numOfBullets = game.rnd.integerInRange(1, livingCowboys.length-1);
+            var numOfBullets = game.rnd.integerInRange(0, livingCowboys.length-1);
             for(var i = 0; i < numOfBullets; i++) {
                 var shooter = livingCowboys[i];
                 
@@ -352,7 +355,7 @@ window.onload = function() {
                 game.physics.arcade.moveToObject(cowboyBullet,asteroid,150);
             }
         }
-        bulletTime = game.time.now + 30;
+        bulletTime = game.time.now + 75;
     }
 
     function playerHitsCowboy(asteroid, cowboy) {
