@@ -350,7 +350,7 @@ window.onload = function() {
                 game.physics.arcade.moveToObject(cowboyBullet,asteroid,150);
             }
         }
-        bulletTime = game.time.now + 65;
+        bulletTime = game.time.now + 30;
     }
 
     function playerHitsCowboy(asteroid, cowboy) {
