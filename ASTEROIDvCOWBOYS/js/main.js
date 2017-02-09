@@ -56,7 +56,7 @@ window.onload = function() {
         cowboyBullets = game.add.group();
         cowboyBullets.enableBody = true;
         cowboyBullets.physicsBodyType = Phaser.Physics.ARCADE;
-        cowboyBullets.createMultiple(30, 'cowboyBullet');
+        cowboyBullets.createMultiple(60, 'cowboyBullet');
         cowboyBullets.setAll('anchor.x', 0.5);
         cowboyBullets.setAll('anchor.y', 1);
         cowboyBullets.setAll('outOfBoundsKill', true);
@@ -335,7 +335,9 @@ window.onload = function() {
         livingCowboys.length=0;
 
         cowboys.forEachAlive(function(cowboy){
-            livingCowboys.push(cowboy);
+            if(cowboy.inWorld()){
+                livingCowboys.push(cowboy);
+            }
         });
 
         if (cowboyBullet && livingCowboys.length > 0) {
