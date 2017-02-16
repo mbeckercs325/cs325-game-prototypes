@@ -225,6 +225,7 @@ window.onload = function() {
                 updateTimer();
             });
         }else if(playerHasCrossedStart === true && playerHasCrossedCheckpoint === true) {
+            playerHasCrossedStart = false;
             playercar.body.velocity.setTo(playercar.body.velocity.x/20, playercar.body.velocity.y/20);
             
             var currentTime = new Date();
