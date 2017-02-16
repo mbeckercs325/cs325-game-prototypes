@@ -11,9 +11,7 @@ window.onload = function() {
         game.load.image( 'powermeter', 'assets/powermeter.png');
         game.load.image( 'powermetercover', 'assets/powermetercover.png');
         game.load.image( 'medalsheet', 'assets/medalsheet.png');
-        game.load.image( 'goldmedal', 'assets/goldmedal.png');
-        game.load.image( 'silvermedal', 'assets/silvermedal.png');
-        game.load.image( 'bronzemedal', 'assets/bronzemedal.png');
+        game.load.image( 'resetbutton', 'assets/resetbutton.png');
     }
         
     var grassbackground;
@@ -37,9 +35,7 @@ window.onload = function() {
     var welcomeLabel;
     var stateLabel;
     var medalsheet;
-    var goldmedal;
-    var silvermedal;
-    var bronzemedal;
+    var resetbutton;
 
     function create() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -56,11 +52,11 @@ window.onload = function() {
         startfinishline.body.checkCollision.left = false;
 	    startfinishline.body.immovable = true;
 
-        checkpoint = game.add.sprite( 603, 202, 'checkpoint');
+        checkpoint = game.add.sprite( 126, 36, 'checkpoint');
         game.physics.enable(checkpoint, Phaser.Physics.ARCADE);
 	    checkpoint.body.checkCollision.up = false;
 	    checkpoint.body.checkCollision.down = false;
-        checkpoint.body.checkCollision.right = false;
+        checkpoint.body.checkCollision.left = false;
 	    checkpoint.body.immovable = true;
 
         raceTimerLabel = game.add.text(310, 150, "00.000", {font: "50px Arial", fill: "#fff"}); 
@@ -81,11 +77,13 @@ window.onload = function() {
 
         stateLabel = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '50px Arial', fill: '#fff' });
         stateLabel.anchor.setTo(0.5, 0.5);
+        stateLabel.align = 'center';
         stateLabel.visible = false;
+
+        resetbutton = game.add.button(1110, 567, 'resetbutton', restart, this);
 
         createPlayerCar();
         createPowerMeter();
-
     }
     
     function update() { 
@@ -227,21 +225,28 @@ window.onload = function() {
                 updateTimer();
             });
         }else if(playerHasCrossedStart === true && playerHasCrossedCheckpoint === true) {
-            playerHasCrossedStart = false;
+            playercar.body.velocity.setTo(playercar.body.velocity.x/20, playercar.body.velocity.y/20);
             
             var currentTime = new Date();
             var timeDifference = startTime.getTime() - currentTime.getTime();
             var timeElapsed = Math.abs(timeDifference/1000);
 
-            if(timeElapsed <= 12) {
+            var stateLabelText;
 
-            }else if(timeElapsed <= 17) {
-
-            }else if(timeElapsed <= 25) {
-
+            if(timeElapsed < 12) {
+                stateLabelText = "Congratulations, you won the gold medal!\nClick to restart";
+            }else if(timeElapsed < 17) {
+                stateLabelText = "Congratulations, you won the silver medal!\nClick to restart";
+            }else if(timeElapsed < 25) {
+                stateLabelText = "Congratulations, you won the bronze medal!\nClick to restart";
             }else {
-                
+                stateLabelText = "You were not fast enough to win any medals.\nClick to try again";
             }
+
+            stateLabel.text = stateLabelText;
+            stateLabel.visible = true;
+
+            game.input.onTap.addOnce(restart,this);
         }
     }
 
@@ -267,7 +272,19 @@ window.onload = function() {
         result += (milliseconds < 100) ? ".0" + milliseconds : (milliseconds < 10) ? ".00" + milliseconds : "." + milliseconds; 
  
         raceTimerLabel.text = result;
- 
-}
+    }
+
+    function restart() {
+        playerHasCrossedStart = false;
+        playerHasCrossedCheckpoint = false;
+        
+        raceTimerLabel.text = "00.000";
+
+        playercar.x = racetrack1Start.x;
+        playercar.y = racetrack1Start.y;
+        playercar.rotation = 0;
+
+        stateLabel.visible = false;
+    }
     
 };
