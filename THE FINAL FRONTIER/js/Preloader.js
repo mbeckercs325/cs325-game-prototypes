@@ -29,7 +29,7 @@ GameStates.makePreloader = function (game) {
             //	As this is just a Project Template I've not provided these assets, swap them for your own.
             game.load.image('startbutton', 'assets/startbutton.png');
             game.load.image('mainMenuLogo', 'assets/mainMenuLogo.png');
-            game.load.image('spaceship', 'assets/spaceship.png');
+            game.load.image('spaceship', 'assets/spaceship.PNG');
             game.load.audio('spaceshipSound', 'assets/sounds/spaceship_engine_sound.mp3');
             game.load.image('planet1', 'assets/planets/Planet1.png');
             game.load.image('zoomedPlanet1', 'assets/planets/zoomedPlanet1.png');
