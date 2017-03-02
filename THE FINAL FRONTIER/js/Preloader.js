@@ -29,15 +29,15 @@ GameStates.makePreloader = function (game) {
             //	As this is just a Project Template I've not provided these assets, swap them for your own.
             game.load.image('startbutton', 'assets/startbutton.png');
             game.load.image('mainMenuLogo', 'assets/mainMenuLogo.png');
-            game.load.image('spaceship', 'assets/spaceship.png')
+            game.load.image('spaceship', 'assets/spaceship.png');
             game.load.audio('spaceshipSound', 'assets/sounds/spaceship_engine_sound.mp3');
-            game.load.image('planet1', 'assets/planets/planet1.png');
+            game.load.image('planet1', 'assets/planets/Planet1.png');
             game.load.image('zoomedPlanet1', 'assets/planets/zoomedPlanet1.png');
-            game.load.image('planet2', 'assets/planets/planet2.png');
+            game.load.image('planet2', 'assets/planets/Planet2.png');
             game.load.image('zoomedPlanet2', 'assets/planets/zoomedPlanet2.png');
-            game.load.image('planet3', 'assets/planets/planet3.png');
+            game.load.image('planet3', 'assets/planets/Planet3.png');
             game.load.image('zoomedPlanet3', 'assets/planets/zoomedPlanet3.png');
-            game.load.image('planet4', 'assets/planets/planet4.png');
+            game.load.image('planet4', 'assets/planets/Planet4.png');
             game.load.image('zoomedPlanet4', 'assets/planets/zoomedPlanet4.png');
             game.load.image('attackButton', 'assets/attackButton.png');
             game.load.image('retreatButton', 'assets/retreatButton.png');
