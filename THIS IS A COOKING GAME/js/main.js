@@ -322,7 +322,7 @@ window.onload = function() {
                         player1.addChild(game.make.sprite(-20, -8,'tomato'));
 
                         tomato.destroy();
-                        typeHolding = 'lettuce';
+                        typeHolding = 'tomato';
                         player1Holding = true;
                         tomatoAvailable = false;
                         player1HoldTimer = game.time.now+350;
@@ -336,7 +336,7 @@ window.onload = function() {
                         player2.addChild(game.make.sprite(-20, -8,'tomato'));
 
                         tomato.destroy();
-                        typeHolding = 'lettuce';
+                        typeHolding = 'tomato';
                         player2Holding = true;
                         tomatoAvailable = false;
                         player2HoldTimer = game.time.now+350;
