@@ -1,24 +1,293 @@
-"use strict";
-
 window.onload = function() {
+    "use strict";
+    
+    var game = new Phaser.Game( 480, 480, Phaser.AUTO, 'game', { preload: preload, create: create, update: update } );
+    
+    function preload() {
+        game.load.tilemap('tilemap', 'assets/kitchentilemap.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('tiles1', 'assets/tileset1.png');
+        game.load.image('tiles2', 'assets/tileset2.png');
+        game.load.image('tiles3', 'assets/tileset3.png');
+        game.load.image('player1', 'assets/player1.png');
+        game.load.image('player2', 'assets/player2.png');
+        game.load.image('lettuce', 'assets/lettuce.png');
+        game.load.image('tomato', 'assets/tomato.png');
+        game.load.image('meat', 'assets/meat.png');
+        game.load.image('bun', 'assets/bun.png');
+    }
+    
+    var map;
+    var backgroundLayer;
+    var wallsLayer;
+    var conveyorLayer;
+    var shelvesLayer;
+    var deliveryLayer;
+    var plateLayer;
+    var stoveLayer;
+    var cuttingboardLayer;
+    var lettuceLayer;
+    var tomatoLayer;
+    var meatLayer;
+    var bunLayer;
+    var player1;
+    var player1HoldTimer = 0;
+    var player1Holding = false;
+    var player2;
+    var player2HoldTimer = 0;
+    var player2Holding = false;
+    var player1Keys;
+    var player2Keys;
+    var noticeRange = 18;
+    var lettuces;
+    var lettuceAvailable = false;
+    var tomatoes;
+    var tomatoAvailable = false;
+    var meats;
+    var meatAvailable = false;
+    var buns;
+    var bunAvailable = false;
+    var typeHolding;
+    
+    function create() {
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+ 
+        map = game.add.tilemap('tilemap');
+        map.addTilesetImage('tileset1', 'tiles1');
+        map.addTilesetImage('tileset2', 'tiles2');
+        map.addTilesetImage('tileset3', 'tiles3');
+ 
+        backgroundLayer = map.createLayer('Background');
+        wallsLayer = map.createLayer('Walls');
+        conveyorLayer = map.createLayer('Conveyor');
+        shelvesLayer = map.createLayer('Shelves');
+        deliveryLayer = map.createLayer('Delivery');
+        plateLayer = map.createLayer('Plates');
+        stoveLayer = map.createLayer('Stoves');
+        cuttingboardLayer = map.createLayer('Cuttingboards');
+        lettuceLayer = map.createLayer('Lettuce');
+        tomatoLayer = map.createLayer('Tomato');
+        meatLayer = map.createLayer('Meat');
+        bunLayer = map.createLayer('Buns');
+ 
+        map.setCollisionBetween(0, 10000, true, shelvesLayer);
+        map.setCollisionBetween(1, 10000, true, conveyorLayer);
 
-	//	Create your Phaser game and inject it into the 'game' div.
-	//	We did it in a window.onload event, but you can do it anywhere (requireJS load, anonymous function, jQuery dom ready, - whatever floats your boat)
-	var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game' );
+        backgroundLayer.resizeWorld();
 
-	//	Add the States your game has.
-	//	You don't have to do this in the html, it could be done in your Boot state too, but for simplicity I'll keep it here.
-	
-	// An object for shared variables, so that them main menu can show
-	// the high score if you want.
-	var shared = {};
-	
-	game.state.add( 'Boot', GameStates.makeBoot( game ) );
-	game.state.add( 'Preloader', GameStates.makePreloader( game ) );
-	game.state.add( 'MainMenu', GameStates.makeMainMenu( game, shared ) );
-	game.state.add( 'Game', GameStates.makeGame( game, shared ) );
+        player1 = game.add.sprite(128,240,'player1');
+        player1.anchor.setTo( 0.5, 0.5 );
+        game.physics.enable( player1, Phaser.Physics.ARCADE );
+        //player1.body.collideWorldBounds = true;
+        player1.debug = true;
 
-	//	Now start the Boot state.
-	game.state.start('Boot');
+        player2 = game.add.sprite(352,240,'player2');
+        player2.anchor.setTo( 0.5, 0.5 );
+        game.physics.enable( player2, Phaser.Physics.ARCADE );
+        //player2.body.collideWorldBounds = true;
+ 
+        player1Keys = {
+            up: game.input.keyboard.addKey(Phaser.Keyboard.W),
+            down: game.input.keyboard.addKey(Phaser.Keyboard.S),
+            left: game.input.keyboard.addKey(Phaser.Keyboard.A),
+            right: game.input.keyboard.addKey(Phaser.Keyboard.D),
+            select: game.input.keyboard.addKey(Phaser.Keyboard.E),
+        };
 
+        player2Keys = {
+            up: game.input.keyboard.addKey(Phaser.Keyboard.UP),
+            down: game.input.keyboard.addKey(Phaser.Keyboard.DOWN),
+            left: game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+            right: game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
+            select: game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK),
+        };
+
+        lettuces = game.add.group();
+        lettuces.enableBody = true;
+        lettuces.physicsBodyType = Phaser.Physics.ARCADE;
+
+        tomatoes = game.add.group();
+        tomatoes.enableBody = true;
+        tomatoes.physicsBodyType = Phaser.Physics.ARCADE;
+
+        meats = game.add.group();
+        meats.enableBody = true;
+        meats.physicsBodyType = Phaser.Physics.ARCADE;
+
+        buns = game.add.group();
+        buns.enableBody = true;
+        buns.physicsBodyType = Phaser.Physics.ARCADE;
+    }
+    
+    function update() {
+        spawnLettuce();
+        spawnTomato();
+        spawnMeat();
+        spawnBun();
+
+        if(player1Keys.up.isDown){
+            player1.body.y -= 1;
+            if(player1.children.length > 0){
+                game.physics.enable( player1.getChildAt(0), Phaser.Physics.ARCADE );
+                player1.getChildAt(0).body.x = player1.body.x;
+                player1.getChildAt(0).body.y = player1.body.y-12;
+            }
+        }else if(player1Keys.down.isDown){
+            player1.body.y += 1;
+            if(player1.children.length > 0){
+                game.physics.enable( player1.getChildAt(0), Phaser.Physics.ARCADE );
+                player1.getChildAt(0).body.x = player1.body.x;
+                player1.getChildAt(0).body.y = player1.body.y+12;
+            }
+        }else if(player1Keys.right.isDown){
+            player1.body.x += 1;
+            if(player1.children.length > 0){
+                game.physics.enable( player1.getChildAt(0), Phaser.Physics.ARCADE );
+                player1.getChildAt(0).body.x = player1.body.x+12;
+                player1.getChildAt(0).body.y = player1.body.y;
+            }
+        }else if(player1Keys.left.isDown){
+            player1.body.x -= 1;
+            if(player1.children.length > 0){
+                game.physics.enable( player1.getChildAt(0), Phaser.Physics.ARCADE );
+                player1.getChildAt(0).body.x = player1.body.x-12;
+                player1.getChildAt(0).body.y = player1.body.y;
+            }
+        }else if(player1Keys.select.isDown && player1Holding === true){
+            if(player1HoldTimer < game.time.now){
+                player1.removeChildAt(0);
+
+                var droppedItem;
+                if(typeHolding === 'lettuce'){
+                    droppedItem = lettuces.create(player1.body.x+8, player1.body.y+8, typeHolding);
+                }else if(typeHolding === 'tomato'){
+                    droppedItem = tomatoes.create(player1.body.x+8, player1.body.y+8, typeHolding);
+                }else if(typeHolding === 'meat'){
+                    droppedItem = meats.create(player1.body.x+8, player1.body.y+8, typeHolding);
+                }else if(typeHolding === 'bun'){
+                    droppedItem = buns.create(player1.body.x+8, player1.body.y+8, typeHolding);
+                }
+                droppedItem.anchor.setTo(0.5, 0.5);
+
+                player1Holding = false;
+                player1HoldTimer = game.time.now+350;
+            }
+        }
+
+        if(player2Keys.up.isDown){
+            player2.body.y -= 1;
+        }else if(player2Keys.down.isDown){
+            player2.body.y += 1;
+        }else if(player2Keys.right.isDown){
+            player2.body.x += 1;
+        }else if(player2Keys.left.isDown){
+            player2.body.x -= 1;
+        }else if(player2Keys.select.isDown){
+            
+        }
+
+        game.physics.arcade.collide(player1, conveyorLayer);
+        game.physics.arcade.collide(player2, conveyorLayer);
+        game.physics.arcade.collide(player1, shelvesLayer);
+        game.physics.arcade.collide(player2, shelvesLayer);
+
+        lettuces.forEach(function(lettuce){
+            if (game.physics.arcade.distanceBetween(player1, lettuce) < noticeRange) {
+                if(player1Keys.select.isDown && player1Holding === false){
+                    if(player1HoldTimer < game.time.now){
+                        player1.addChild(game.make.sprite(-20, -8,'lettuce'));
+
+                        lettuce.destroy();
+                        typeHolding = 'lettuce';
+                        player1Holding = true;
+                        lettuceAvailable = false;
+                        player1HoldTimer = game.time.now+350;
+                    }
+                }
+            }
+        });
+
+        tomatoes.forEach(function(tomato){
+            if (game.physics.arcade.distanceBetween(player1, tomato) < noticeRange) {
+                 if(player1Keys.select.isDown && player1Holding === false){
+                     if(player1HoldTimer < game.time.now){
+                        player1.addChild(game.make.sprite(-20, -8,'tomato'));
+
+                        tomato.destroy();
+                        typeHolding = 'lettuce';
+                        player1Holding = true;
+                        tomatoAvailable = false;
+                        player1HoldTimer = game.time.now+350;
+                     }
+                 }
+            }
+        });
+
+        meats.forEach(function(meat){
+            if (game.physics.arcade.distanceBetween(player1, meat) < noticeRange) {
+                 if(player1Keys.select.isDown && player1Holding === false){
+                     if(player1HoldTimer < game.time.now){
+                        player1.addChild(game.make.sprite(-20, -8,'meat'));
+
+                        meat.destroy();
+                        typeHolding = 'meat';
+                        player1Holding = true;
+                        meatAvailable = false;
+                        player1HoldTimer = game.time.now+350;
+                     }
+                 }
+            }
+        });
+
+        buns.forEach(function(bun){
+            if (game.physics.arcade.distanceBetween(player1, bun) < noticeRange) {
+                 if(player1Keys.select.isDown && player1Holding === false){
+                     if(player1HoldTimer < game.time.now){
+                        player1.addChild(game.make.sprite(-20, -8,'bun'));
+
+                        bun.destroy();
+                        typeHolding = 'bun';
+                        player1Holding = true;
+                        bunAvailable = false;
+                        player1HoldTimer = game.time.now+350;
+                     }
+                 }
+            }
+        });
+    }
+
+    function spawnLettuce() {
+        if(lettuceAvailable === false) {
+            var newLettuce = lettuces.create(40, 280, 'lettuce');
+            newLettuce.anchor.setTo(0.5, 0.5);
+
+            lettuceAvailable = true;
+        }
+    }
+
+    function spawnTomato() {
+        if(tomatoAvailable === false) {
+            var newTomato = tomatoes.create(40, 264, 'tomato');
+            newTomato.anchor.setTo(0.5, 0.5);
+
+            tomatoAvailable = true;
+        }
+    }
+
+    function spawnMeat() {
+        if(meatAvailable === false) {
+            var newMeat = meats.create(40, 248, 'meat');
+            newMeat.anchor.setTo(0.5, 0.5);
+
+            meatAvailable = true;
+        }
+    }
+
+    function spawnBun() {
+        if(bunAvailable === false) {
+            var newBun = buns.create(40, 216, 'bun');
+            newBun.anchor.setTo(0.5, 0.5);
+
+            bunAvailable = true;
+        }
+    }
 };
