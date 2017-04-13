@@ -317,8 +317,8 @@ window.onload = function() {
 
         tomatoes.forEach(function(tomato){
             if (game.physics.arcade.distanceBetween(player1, tomato) < noticeRange) {
-                 if(player1Keys.select.isDown && player1Holding === false){
-                     if(player1HoldTimer < game.time.now){
+                if(player1Keys.select.isDown && player1Holding === false){
+                    if(player1HoldTimer < game.time.now){
                         player1.addChild(game.make.sprite(-20, -8,'tomato'));
 
                         tomato.destroy();
@@ -326,13 +326,13 @@ window.onload = function() {
                         player1Holding = true;
                         tomatoAvailable = false;
                         player1HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
 
             if (game.physics.arcade.distanceBetween(player2, tomato) < noticeRange) {
-                 if(player2Keys.select.isDown && player2Holding === false){
-                     if(player2HoldTimer < game.time.now){
+                if(player2Keys.select.isDown && player2Holding === false){
+                    if(player2HoldTimer < game.time.now){
                         player2.addChild(game.make.sprite(-20, -8,'tomato'));
 
                         tomato.destroy();
@@ -340,15 +340,15 @@ window.onload = function() {
                         player2Holding = true;
                         tomatoAvailable = false;
                         player2HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
         });
 
         meats.forEach(function(meat){
             if (game.physics.arcade.distanceBetween(player1, meat) < noticeRange) {
-                 if(player1Keys.select.isDown && player1Holding === false){
-                     if(player1HoldTimer < game.time.now){
+                if(player1Keys.select.isDown && player1Holding === false){
+                    if(player1HoldTimer < game.time.now){
                         player1.addChild(game.make.sprite(-20, -8,'meat'));
 
                         meat.destroy();
@@ -356,8 +356,8 @@ window.onload = function() {
                         player1Holding = true;
                         meatAvailable = false;
                         player1HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
 
             if (game.physics.arcade.distanceBetween(player2, meat) < noticeRange) {
@@ -377,8 +377,8 @@ window.onload = function() {
 
         buns.forEach(function(bun){
             if (game.physics.arcade.distanceBetween(player1, bun) < noticeRange) {
-                 if(player1Keys.select.isDown && player1Holding === false){
-                     if(player1HoldTimer < game.time.now){
+                if(player1Keys.select.isDown && player1Holding === false){
+                    if(player1HoldTimer < game.time.now){
                         player1.addChild(game.make.sprite(-20, -8,'bun'));
 
                         bun.destroy();
@@ -386,13 +386,13 @@ window.onload = function() {
                         player1Holding = true;
                         bunAvailable = false;
                         player1HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
 
             if (game.physics.arcade.distanceBetween(player2, bun) < noticeRange) {
-                 if(player2Keys.select.isDown && player2Holding === false){
-                     if(player2HoldTimer < game.time.now){
+                if(player2Keys.select.isDown && player2Holding === false){
+                    if(player2HoldTimer < game.time.now){
                         player2.addChild(game.make.sprite(-20, -8,'bun'));
 
                         bun.destroy();
@@ -400,15 +400,15 @@ window.onload = function() {
                         player2Holding = true;
                         bunAvailable = false;
                         player2HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
         });
 
         plates.forEach(function(plate){
             if (game.physics.arcade.distanceBetween(player1, plate) < noticeRange) {
-                 if(player1Keys.select.isDown && player1Holding === false){
-                     if(player1HoldTimer < game.time.now){
+                if(player1Keys.select.isDown && player1Holding === false){
+                    if(player1HoldTimer < game.time.now){
                         player1.addChild(game.make.sprite(-20, -8,'plate'));
 
                         plate.destroy();
@@ -416,22 +416,22 @@ window.onload = function() {
                         player1Holding = true;
                         plateAvailable = false;
                         player1HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
 
             if (game.physics.arcade.distanceBetween(player2, plate) < noticeRange) {
-                 if(player2Keys.select.isDown && player2Holding === false){
-                     if(player2HoldTimer < game.time.now){
-                        player2.addChild(game.make.sprite(-20, -8,'plate'));
+                if(player2Keys.select.isDown && player2Holding === false){
+                    if(player2HoldTimer < game.time.now){
+                        player2.addChild(game.make.sprite(5, -8,'plate'));
 
                         plate.destroy();
                         typeHolding = 'plate';
                         player2Holding = true;
                         plateAvailable = false;
                         player2HoldTimer = game.time.now+350;
-                     }
-                 }
+                    }
+                }
             }
         });
     }
