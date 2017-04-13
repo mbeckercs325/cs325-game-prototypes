@@ -292,8 +292,8 @@ window.onload = function() {
             var newPlate = plates.create(440, 104, 'plate');
             newPlate.anchor.setTo(0.5, 0.5);
 
-            var newPlate1 = burgersGroup.create(440, 120, 'burger');
-            newPlate1.anchor.setTo(0.5, 0.5);
+            // var newPlate1 = burgersGroup.create(440, 120, 'burger');
+            // newPlate1.anchor.setTo(0.5, 0.5);
 
             plates.isAvailable = true;
         }
