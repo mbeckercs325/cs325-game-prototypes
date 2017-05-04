@@ -152,7 +152,7 @@ window.onload = function () {
                 var coord = coords[i];
                 if (Phaser.Rectangle.containsPoint(ball, new Phaser.Point(coord[0], coord[1]))) {
                     blackBall.kill();
-                    health -= 20;
+                    health -= 10;
                     break;
                 }
             }
