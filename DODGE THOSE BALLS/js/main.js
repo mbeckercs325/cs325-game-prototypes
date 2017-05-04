@@ -114,7 +114,7 @@ window.onload = function () {
     function spawnBlackBall() {
         if (bbTimer < game.time.now) {
             var chance = game.rnd.integerInRange(0, 100);
-            if (chance < 15) {
+            if (chance < 10) {
                 var blackBall = blackBalls.create(game.world.randomX, game.world.randomY, 'ball');
                 game.physics.enable(blackBall, Phaser.Physics.ARCADE);
                 blackBall.body.outOfBoundsKill = true;
@@ -123,14 +123,14 @@ window.onload = function () {
                 game.physics.arcade.moveToObject(blackBall, rect, 100);
 
             }
-            bbTimer = game.time.now + 250;
+            bbTimer = game.time.now + 200;
         }
     }
 
     function spawnGreenBall() {
         if (gbTimer < game.time.now) {
             var chance = game.rnd.integerInRange(0, 100);
-            if (chance < 10) {
+            if (chance < 7) {
                 var greenBall = greenBalls.create(game.world.randomX, game.world.randomY, 'ball1');
                 game.physics.enable(greenBall, Phaser.Physics.ARCADE);
                 greenBall.body.outOfBoundsKill = true;
@@ -139,7 +139,7 @@ window.onload = function () {
                 game.physics.arcade.moveToObject(greenBall, rect, 100);
 
             }
-            gbTimer = game.time.now + 250;
+            gbTimer = game.time.now + 200;
         }
     }
 
