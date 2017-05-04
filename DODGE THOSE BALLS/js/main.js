@@ -114,7 +114,7 @@ window.onload = function () {
     function spawnBlackBall() {
         if (bbTimer < game.time.now) {
             var chance = game.rnd.integerInRange(0, 100);
-            if (chance < 10) {
+            if (chance < 15) {
                 var blackBall = blackBalls.create(game.world.randomX, game.world.randomY, 'ball');
                 game.physics.enable(blackBall, Phaser.Physics.ARCADE);
                 blackBall.body.outOfBoundsKill = true;
@@ -130,7 +130,7 @@ window.onload = function () {
     function spawnGreenBall() {
         if (gbTimer < game.time.now) {
             var chance = game.rnd.integerInRange(0, 100);
-            if (chance < 5) {
+            if (chance < 10) {
                 var greenBall = greenBalls.create(game.world.randomX, game.world.randomY, 'ball1');
                 game.physics.enable(greenBall, Phaser.Physics.ARCADE);
                 greenBall.body.outOfBoundsKill = true;
